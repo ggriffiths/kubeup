@@ -1,0 +1,10 @@
+kind: StorageClass
+apiVersion: storage.k8s.io/v1beta1
+metadata:
+    name: portworx-sc-nfs
+provisioner: pxd.portworx.com
+parameters:
+    fs: "nfs"
+    repl: "3"
+    sharedv4: "true"
+    best_effort_location_provisioning: "true"

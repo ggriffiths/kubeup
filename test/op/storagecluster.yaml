@@ -1,0 +1,37 @@
+apiVersion: core.libopenstorage.org/v1alpha1
+kind: StorageCluster
+metadata:
+    name: portworx
+    namespace: kube-system
+    annotations:
+        portworx.io/is-openshift: 'false'
+spec:
+    image: 'portworx/oci-monitor:b61d074_39e53e1'
+    imagePullSecrets:
+    - name: regcred
+    security:
+        enabled: true
+    stork:
+        enabled: true
+        image: 'openstorage/stork:2.2.5'
+    userInterface:
+        enabled: true
+        image: 'portworx/px-lighthouse:2.0.4'
+    storage:
+        useAll: true
+    featureGates:
+        CSI: "true"
+    env:
+    - name: REGISTRY_USER
+      value: "pwxbuild"
+    - name: REGISTRY_PASS
+      value: "fridaydemos"
+      #- name: PORTWORX_AUTH_JWT_ISSUER
+      # value: "test.io"
+      #- name: PORTWORX_AUTH_JWT_SHAREDSECRET
+      # value: "mysecret"
+      #  - name: PORTWORX_AUTH_SYSTEM_KEY
+      # valueFrom:
+      #    secretKeyRef:
+      #        name: px-secret
+      #        key: auth-secret

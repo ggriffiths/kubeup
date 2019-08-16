@@ -1,0 +1,15 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: no-auth-mysql-data-nfs
+  annotations:
+    volume.beta.kubernetes.io/storage-class: portworx-sc-nfs
+    def: test 
+  labels:
+    abc: "456"
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi

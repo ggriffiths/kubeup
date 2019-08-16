@@ -1,0 +1,29 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: busybox
+spec:
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: busybox
+        version: "1"
+    spec:
+      containers:
+      - image: busybox:1.29 
+        name: busybox
+        command: ['sh', '-c', 'sleep 1000000']
+        volumeMounts:
+        - name: busybox-persistent-storage
+          mountPath: /var/lib/busybox  
+          subPath: busybox
+      volumes:
+        - name: busybox-persistent-storage
+          persistentVolumeClaim:
+            claimName: no-auth-mysql-data 

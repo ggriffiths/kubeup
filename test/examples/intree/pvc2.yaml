@@ -1,0 +1,14 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: pvc-auth
+  annotations:
+    volume.beta.kubernetes.io/storage-class: portworx-sc
+    openstorage.io/auth-secret-name: px-secret
+    openstorage.io/auth-secret-namespace: default
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi

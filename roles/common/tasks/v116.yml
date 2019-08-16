@@ -1,3 +1,6 @@
+- name: install docker ce yum set obsolete
+  command: yum-config-manager --save --setopt=obsoletes=0
+
 - name: install v1.16 kubernetes
   yum: name={{ packages }} state=present disable_gpg_check=yes
   vars:

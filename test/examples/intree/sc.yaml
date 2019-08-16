@@ -1,0 +1,9 @@
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+    name: portworx-sc
+provisioner: kubernetes.io/portworx-volume
+parameters:
+   repl: "3"
+   openstorage.io/auth-secret-name: px-secret
+   openstorage.io/auth-secret-namespace: "default"

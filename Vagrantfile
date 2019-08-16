@@ -5,7 +5,7 @@ require 'socket'
 ### CONFIGURATION ###
 
 CLUSTER = "1" # Cluster value must be from 1-9 only because it is used in IP_PREFIX
-NAME_PREFIX = "lpabon-k8s-"
+NAME_PREFIX = "grant-k8s-"
 
 # Prefix for IP address: In essense: IP_PREFIX+id => "192.168.10.19
 IP_PREFIX = "192.168.10." + CLUSTER
@@ -13,8 +13,8 @@ IP_PREFIX = "192.168.10." + CLUSTER
 ### Infrastructure ###
 NODES = 3
 DISKS = 3
-MEMORY = 8196
-CPUS = 2
+MEMORY = 8192
+CPUS = 4
 NESTED = true
 
 PREFIX = NAME_PREFIX + CLUSTER
