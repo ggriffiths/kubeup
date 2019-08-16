@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: koka-pvc-local
+  namespace: default
+  annotations:
+    volume.beta.kubernetes.io/storage-class: koka-sc-local
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 3Gi
