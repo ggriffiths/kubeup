@@ -1,0 +1,65 @@
+apiVersion: storage.k8s.io/v1beta1
+kind: StorageClass
+metadata:
+  name: nginx-sc-shared4
+provisioner: pxd.portworx.com 
+parameters:
+    #csi.storage.k8s.io/provisioner-secret-name: px-secret 
+    #csi.storage.k8s.io/provisioner-secret-namespace: px-secret 
+    #csi.storage.k8s.io/node-stage-secret-name: ${pvc.name} 
+    #csi.storage.k8s.io/node-stage-secret-namespace: ${pvc.namespace}
+    #csi.storage.k8s.io/node-publish-secret-name: ${pvc.name} 
+    #csi.storage.k8s.io/node-publish-secret-namespace: ${pvc.namespace}
+    #csi.storage.k8s.io/controller-expand-secret-name: ${pvc.name} 
+    #csi.storage.k8s.io/controller-expand-secret-namespace: ${pvc.namespace}
+    #secure: "true"
+  repl: "2"
+  priority_io: "high"
+  sharedv4: "true"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+ name: nginx-pvc-shared4
+ annotations:
+   volume.beta.kubernetes.io/storage-class: nginx-sc-shared4
+   #csi.openstorage.org/pvc-name: "no-auth-mysql-data-secure"
+   #csi.openstorage.org/pvc-namespace: "default"
+   #px/secure: "true"  
+   #px/secret-name: px-secret 
+   #px/secret-namespace: default
+   #px/secret-key: auth-token
+spec:
+ accessModes:
+   - ReadWriteMany
+ resources:
+   requests:
+     storage: 5Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginxv4
+spec:
+  selector:
+    matchLabels:
+      app: nginxv4
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: nginxv4
+    spec:
+      schedulerName: stork
+      containers:
+      - name: nginxv4
+        image: bitnami/nginx
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - mountPath: /mnt/nginx
+          name: nginxv4
+      volumes:
+      - name: nginxv4
+        persistentVolumeClaim:
+          claimName: nginx-pvc-shared4

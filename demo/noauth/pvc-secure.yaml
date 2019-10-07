@@ -1,0 +1,18 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: no-auth-mysql-data-secure
+  annotations:
+    volume.beta.kubernetes.io/storage-class: portworx-sc
+    csi.openstorage.org/pvc-name: "no-auth-mysql-data-secure"
+    csi.openstorage.org/pvc-namespace: "default"
+    px/secure: "true"  
+    px/secret-name: px-vol-encryption
+    px/secret-namespace: kube-system 
+    px/secret-key: cluster-wide-secret-key
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi

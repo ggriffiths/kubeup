@@ -4,6 +4,8 @@ metadata:
   name: mysql-data
   annotations:
     volume.beta.kubernetes.io/storage-class: portworx-sc
+    csi.storage.k8s.io/controller-publish-secret-name: mysecret
+    csi.storage.k8s.io/controller-publish-secret-namespace: default
 spec:
   accessModes:
     - ReadWriteOnce

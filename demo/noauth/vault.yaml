@@ -1,0 +1,54 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: vault
+  namespace: kube-system
+spec:
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: vault
+        version: "1"
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: px/enabled
+                operator: NotIn
+                values:
+                - "false"
+              - key: node-role.kubernetes.io/master
+                operator: DoesNotExist
+      containers:
+      - image: vault
+        name: vault
+        env:
+        - name: VAULT_DEV_ROOT_TOKEN_ID
+          value: vault
+        - name: VAULT_ADDR
+          value: http://127.0.0.1:8200
+        ports:
+        - containerPort: 8200
+        args: ["server", "-dev"]
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: vault
+  namespace: kube-system
+  labels:
+    run: vault
+spec:
+  ports:
+  - port: 8200
+    protocol: TCP
+  selector:
+    run: vault          
